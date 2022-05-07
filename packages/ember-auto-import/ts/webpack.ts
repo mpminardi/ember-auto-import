@@ -89,9 +89,9 @@ window._eai_d = define;
 export default class WebpackBundler extends Plugin implements Bundler {
   private state:
     | {
-        webpack: Compiler;
-        stagingDir: string;
-      }
+      webpack: Compiler;
+      stagingDir: string;
+    }
     | undefined;
 
   private lastBuildResult: BuildResult | undefined;
@@ -152,7 +152,7 @@ export default class WebpackBundler extends Plugin implements Bundler {
       // part of this.opts.babelConfig)
       target: `browserslist:${this.opts.browserslist}`,
       output: {
-        path: join(this.outputPath, 'assets'),
+        path: join(this.outputPath, this.opts.webpackOutputFolder),
         publicPath: this.opts.publicAssetURL,
         filename: `chunk.[id].[chunkhash].js`,
         chunkFilename: `chunk.[id].[chunkhash].js`,
@@ -371,14 +371,14 @@ export default class WebpackBundler extends Plugin implements Bundler {
       ) {
         output.entrypoints.set(
           id,
-          entrypointAssets.map((a) => 'assets/' + a.name)
+          entrypointAssets.map((a) => this.opts.webpackOutputFolder + a.name)
         );
       }
       entrypointAssets.forEach((asset) => nonLazyAssets.add(asset.name));
     }
     for (let asset of assets!) {
       if (!nonLazyAssets.has(asset.name)) {
-        output.lazyAssets.push('assets/' + asset.name);
+        output.lazyAssets.push(this.opts.webpackOutputFolder + asset.name);
       }
     }
     return output;

@@ -29,6 +29,7 @@ export interface Options {
   exclude?: string[];
   alias?: { [fromName: string]: string };
   webpack?: Configuration;
+  webpackOutputFolder?: string,
   publicAssetURL?: string;
   styleLoaderOptions?: Record<string, unknown>;
   cssLoaderOptions?: Record<string, unknown>;
@@ -210,9 +211,9 @@ export default class Package {
     let { pkg } = this;
     return Boolean(
       pkg.dependencies?.[name] ||
-        pkg.devDependencies?.[name] ||
-        pkg.peerDependencies?.[name] ||
-        this.magicDeps?.get(name)
+      pkg.devDependencies?.[name] ||
+      pkg.peerDependencies?.[name] ||
+      this.magicDeps?.get(name)
     );
   }
 
@@ -231,8 +232,8 @@ export default class Package {
     let pkg = this.pkg;
     return Boolean(
       pkg.dependencies?.[name] ||
-        pkg.peerDependencies?.[name] ||
-        this.magicDeps?.has(name)
+      pkg.peerDependencies?.[name] ||
+      this.magicDeps?.has(name)
     );
   }
 
@@ -353,8 +354,8 @@ export default class Package {
   private excludesDependency(name: string): boolean {
     return Boolean(
       this.autoImportOptions &&
-        this.autoImportOptions.exclude &&
-        this.autoImportOptions.exclude.includes(name)
+      this.autoImportOptions.exclude &&
+      this.autoImportOptions.exclude.includes(name)
     );
   }
 
@@ -405,7 +406,14 @@ export default class Package {
     }
     return ensureTrailingSlash(
       this.autoImportOptions?.publicAssetURL ??
-        ensureTrailingSlash((this._parent as any).config().rootURL) + 'assets/'
+      ensureTrailingSlash((this._parent as any).config().rootURL) + 'assets/'
+    );
+  }
+
+  webpackOutputFolder(): string {
+    return ensureTrailingSlash(
+      this.autoImportOptions?.webpackOutputFolder ??
+      'assets/'
     );
   }
 
@@ -433,8 +441,8 @@ export default class Package {
     // the apps own Content Security Policy.
     return Boolean(
       !this.isAddon &&
-        this.autoImportOptions &&
-        this.autoImportOptions.forbidEval
+      this.autoImportOptions &&
+      this.autoImportOptions.forbidEval
     );
   }
 

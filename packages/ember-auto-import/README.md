@@ -134,6 +134,7 @@ Supported Options
 - `skipBabel`: _list of objects, defaults to []_. The specified packages will be skipped from babel transpilation.
 - `watchDependencies`: _list of strings or string arrays, defaults to []_. Tells ember-auto-import that you'd like to trigger a rebuild if one of these auto-imported dependencies changes. Pass a package name that refers to one of your own dependencies, or pass an array of package names to address a deeper dependency.
 - `webpack`: _object_, An object that will get merged into the configuration we pass to webpack. This lets you work around quirks in underlying libraries and otherwise customize the way Webpack will assemble your dependencies.
+- `webpackOutputFolder`: _string_, defaults to `/assets`. Determines the subfolder under `dist/` that webpack outputs chunk files to.
 
 ## Usage from Addons
 

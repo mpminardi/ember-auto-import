@@ -21,6 +21,7 @@ export interface BundlerOptions {
   browserslist: string;
   webpack: typeof webpack;
   hasFastboot: boolean;
+  webpackOutputFolder: string;
 }
 
 export interface BuildResult {
