@@ -117,7 +117,8 @@ appScenarios
                     },
                   ],
                 },
-              }
+              },
+              webpackOutputFolder: '/app/assets'
             }
           });
           return app.toTree();
@@ -215,6 +216,23 @@ appScenarios
               });
             })
           `,
+          'chunk-url-test.js': `
+          import { module, test } from 'qunit';
+
+          module('Unit | chunk-url', function(hooks) {
+            test('chunks properly point to / fetch from custom webpack output location', async function(assert) {
+              let chunkURLs = [...document.querySelectorAll('script')].map(s => s.src).filter(src => /chunk.*\.js$/.test(src));
+              for (let chunkURL of chunkURLs) {
+                assert.ok(chunkURL.includes('app/assets/'));
+
+                let response = await fetch(chunkURL);
+                let sourceCode = await response.text();
+
+                assert.ok(sourceCode);
+              }
+            });
+          })
+        `,
         },
       },
     });
